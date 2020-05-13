@@ -1,6 +1,8 @@
 FROM alpine:edge
 
-RUN apk add --no-cache dumb-init chromium chromium-chromedriver
+RUN apk add dumb-init chromium chromium-chromedriver fontconfig
+RUN apk add wqy-zenhei --update-cache --repository http://nl.alpinelinux.org/alpine/edge/testing --allow-untrusted
+RUN rm -rf /var/cache/apk/*
 
 EXPOSE 4444
 
