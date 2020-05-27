@@ -2,43 +2,39 @@ version: '2.0'
 services:
   db:
     image: mariadb:10.1
-    container_name: seafile-mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=db_dev  # Requested, set the root's password of MySQL service.
+      - MYSQL_ROOT_PASSWORD=db_dev
       - MYSQL_LOG_CONSOLE=true
     volumes:
-      - /data0/docker-volumes/seafile/db:/var/lib/mysql  # Requested, specifies the path to MySQL data persistent store.
+      - /data0/docker-volumes/seafile/db:/var/lib/mysql
     networks:
       - seafile-net
 
   memcached:
     image: memcached:1.5.6
-    container_name: seafile-memcached
     entrypoint: memcached -m 256
     networks:
       - seafile-net
           
   seafile:
     image: seafileltd/seafile-mc:latest
-    container_name: seafile
     ports:
-      - "80:80"
-      # - "443:443"
+      - "9999:80"
+      - "9998:8080"
     volumes:
       - /data0/docker-volumes/seafile/data:/shared
     environment:
       - DB_HOST=db
-      - DB_ROOT_PASSWD=db_dev  # Requested, the value shuold be root's password of MySQL service.
+      - DB_ROOT_PASSWD=db_dev
       - TIME_ZONE=Asia/Shanghai
-      - SEAFILE_ADMIN_EMAIL=me@example.com # Specifies Seafile admin user, default is 'me@example.com'.
-      - SEAFILE_ADMIN_PASSWORD=asecret     # Specifies Seafile admin password, default is 'asecret'.
-      - SEAFILE_SERVER_LETSENCRYPT=false   # Whether use letsencrypt to generate cert.
-      - SEAFILE_SERVER_HOSTNAME=seafile.example.com # Specifies your host name.
+      - SEAFILE_ADMIN_EMAIL=admin@admin.com
+      - SEAFILE_ADMIN_PASSWORD=admin
+      - SEAFILE_SERVER_LETSENCRYPT=false
+      - SEAFILE_SERVER_HOSTNAME=seafile.example.com
     depends_on:
       - db
       - memcached
     networks:
       - seafile-net
-
 networks:
   seafile-net:
