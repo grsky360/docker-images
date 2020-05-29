@@ -1,0 +1,13 @@
+version: '3'
+services:
+  bitwarden:
+    image: bitwardenrs/server
+    ports:
+      - "9001:80"
+      - "9006:3012"
+    environment:
+      - SIGNUPS_ALLOWED=false
+      - ADMIN_TOKEN=admin_token
+      - WEBSOCKET_ENABLED=true
+    volumes:
+      - /data0/docker-volumes/bitwarden/:/data/
