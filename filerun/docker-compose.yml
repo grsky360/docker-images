@@ -12,7 +12,7 @@ services:
       - /data0/docker-volumes/filerun/db:/var/lib/mysql
 
   web:
-    image: afian/filerun
+    image: afian/filerun:libreoffice
     environment:
       FR_DB_HOST: db
       FR_DB_PORT: 3306
