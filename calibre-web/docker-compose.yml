@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+    calibre-web:
+        image: talebook/calibre-webserver
+        ports:
+            - 9007:80
+        restart: always
+        volumes:
+            - data:/data
+
+volumes:
+    data:
+
