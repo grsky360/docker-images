@@ -4,7 +4,7 @@ services:
     drone-server:
         image: drone/drone:1
         ports: 
-            - 8000:80
+            - ${LISTEN}:80
         environment: 
             DRONE_GITHUB_CLIENT_ID: ${DRONE_GITHUB_CLIENT_ID}
             DRONE_GITHUB_CLIENT_SECRET: ${DRONE_GITHUB_CLIENT_SECRET}
