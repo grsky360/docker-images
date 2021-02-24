@@ -6,7 +6,9 @@ services:
         ports: 
             - 9007:8083
         environment: 
-            APP_REPO: https://hub.fastgit.org/janeczku/calibre-web.git
+            APP_REPO: ${APP_REPO}
+            AMAZON_KG_TAR: ${AMAZON_KG_TAR}
+            AMAZON_KG_URL: ${AMAZON_KG_URL}
             USE_CONFIG_DIR: 'true'
             SET_CONTAINER_TIMEZONE: 'true'
             CONTAINER_TIMEZONE: Asia/Shanghai
