@@ -3,21 +3,20 @@ services:
   miniflux:
     image: miniflux/miniflux:latest
     ports:
-      - "9004:8080"
+      - "9011:8080"
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgres://miniflux:secret@db/miniflux?sslmode=disable
+      - DATABASE_URL=postgres://miniflux:miniflux@db/miniflux?sslmode=disable
       - RUN_MIGRATIONS=1
       - CREATE_ADMIN=1
-      - ADMIN_USERNAME=czhyia
-      - ADMIN_PASSWORD=Hyia170622.99cz
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+
   db:
     image: postgres:latest
     environment:
       - POSTGRES_USER=miniflux
-      - POSTGRES_PASSWORD=secret
+      - POSTGRES_PASSWORD=miniflux
     volumes:
-      - miniflux-db:/var/lib/postgresql/data
-volumes:
-  miniflux-db:
+      - /data0/docker-volumes/miniflux:/var/lib/postgresql/data
