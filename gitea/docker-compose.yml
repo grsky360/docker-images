@@ -13,5 +13,6 @@ services:
             - /data0/docker-volumes/gitea:/data
             - /etc/timezone:/etc/timezone:ro
             - /etc/localtime:/etc/localtime:ro
+            - /home/git/.ssh/:/data/git/.ssh
         restart: always
 
