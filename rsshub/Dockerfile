@@ -4,9 +4,8 @@ ENV NODE_ENV production
 ENV TZ Asia/Shanghai
 
 ARG USE_CHINA_REGISTRY=1;
-ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1;
 
-RUN apk --no-cache add curl python make g++ dumb-init
+RUN apk --no-cache add curl python make g++
 
 WORKDIR /app
 RUN wget --no-check-certificate https://github.com/DIYgod/RSSHub/archive/master.zip
@@ -16,19 +15,23 @@ RUN if [ "$USE_CHINA_REGISTRY" = 1 ]; then \
   fi;
 
 RUN yarn config set strict-ssl false
-# RUN yarn global add http-server vuepress
+RUN yarn global add http-server
 
 RUN unzip master.zip
 
 WORKDIR /app/RSSHub-master
 
 RUN yarn
-# RUN npx vuepress build docs
 
-# RUN http-server -p 1201 docs/.vuepress/dist
+WORKDIR /app/RSSHub-master/docs
+RUN yarn init -y
+RUN yarn add vuepress pinyin @vuepress/plugin-back-to-top @vuepress/plugin-google-analytics @vuepress/plugin-pwa
+RUN npx vuepress build .
+RUN http-server -p 1201 .vuepress/dist > http.log 2>&1 &
+
+WORKDIR /app/RSSHub-master
 
 EXPOSE 1200
 EXPOSE 1201
 
-ENTRYPOINT ["dumb-init", "--"]
 CMD ["yarn", "start"]
