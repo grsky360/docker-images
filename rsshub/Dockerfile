@@ -5,6 +5,7 @@ ENV TZ Asia/Shanghai
 
 ARG USE_CHINA_REGISTRY=1;
 
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
 RUN apk --no-cache add curl python make g++
 
 WORKDIR /app
