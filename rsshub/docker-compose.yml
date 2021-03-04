@@ -2,7 +2,7 @@ version: '3'
 
 services:
     rsshub:
-        build: .
+        image: grsky360/rsshub:latest
         restart: always
         ports:
             - '9003:1200'

@@ -1,39 +1,30 @@
-FROM node:alpine
+FROM diygod/rsshub:latest
 
-ENV NODE_ENV production
-ENV TZ Asia/Shanghai
+WORKDIR /app-doc
 
-ARG USE_CHINA_REGISTRY=1;
+RUN apt-get update && apt-get install -y wget unzip --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
-RUN apk --no-cache add curl python make g++
-
-WORKDIR /app
 RUN wget --no-check-certificate https://github.91chifun.workers.dev//https://github.com/DIYgod/RSSHub/archive/master.zip
 # RUN wget --no-check-certificate https://github.com/DIYgod/RSSHub/archive/master.zip
 
-RUN if [ "$USE_CHINA_REGISTRY" = 1 ]; then \
-  echo 'use yarn mirror'; yarn config set registry https://registry.npm.taobao.org; \
-  fi;
+RUN unzip master.zip
 
 RUN yarn config set strict-ssl false
 RUN yarn global add http-server
 
-RUN unzip master.zip
+WORKDIR /app-doc/RSSHub-master/docs
 
-WORKDIR /app/RSSHub-master
-
-RUN yarn
-
-WORKDIR /app/RSSHub-master/docs
 RUN yarn init -y
 RUN yarn add vuepress pinyin @vuepress/plugin-back-to-top @vuepress/plugin-google-analytics @vuepress/plugin-pwa
 RUN npx vuepress build .
-RUN http-server -p 1201 .vuepress/dist > http.log 2>&1 &
 
-WORKDIR /app/RSSHub-master
+RUN rm -rf /app-doc/master.zip
+RUN rm -rf /app-doc/RSSHub-master/docs/node_modules
+RUN rm -rf /root/.npm/_cacache
+
+WORKDIR /app
 
 EXPOSE 1200
 EXPOSE 1201
 
-CMD ["yarn", "start"]
+CMD ["/bin/sh", "-c", "$(http-server -p 1201 /app-doc/RSSHub-master/docs/.vuepress/dist > http.log 2>&1 &) && cd /app && yarn start"]
