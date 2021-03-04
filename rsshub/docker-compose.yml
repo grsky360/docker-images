@@ -2,10 +2,12 @@ version: '3'
 
 services:
     rsshub:
-        image: diygod/rsshub
+        # image: diygod/rsshub
+        build: .
         restart: always
         ports:
             - '9003:1200'
+            - '9014:1201'
         environment:
             NODE_ENV: production
             CACHE_TYPE: redis

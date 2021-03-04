@@ -8,11 +8,25 @@ services:
         environment: 
             DRONE_GITHUB_CLIENT_ID: ${DRONE_GITHUB_CLIENT_ID}
             DRONE_GITHUB_CLIENT_SECRET: ${DRONE_GITHUB_CLIENT_SECRET}
-            DRONE_RPC_SECRET: ${DRONE_RPC_SECRET}
+            DRONE_RPC_SECRET: ${DRONE_RPC_SECRET:-rpc_secret}
             DRONE_SERVER_HOST: ${DRONE_SERVER_HOST}
             DRONE_SERVER_PROTO: ${DRONE_SERVER_PROTO}
             DRONE_USER_FILTER: ${DRONE_USER_FILTER}
             DRONE_USER_CREATE: ${DRONE_USER_CREATE}
         volumes: 
             - /data0/docker-volumes/drone:/data
+        restart: always
+
+    drone-runner-docker:
+        image: drone/drone-runner-docker:1
+        ports:
+            - 9013:3000
+        environment: 
+            DRONE_RPC_PROTO: https
+            DRONE_RPC_HOST: ci.ilio.tech
+            DRONE_RPC_SECRET: ${DRONE_RPC_SECRET:-rpc_secret}
+            DRONE_RUNNER_CAPACITY: 2
+            DRONE_RUNNER_NAME: drone-runner-docker
+        volumes: 
+            - /var/run/docker.sock:/var/run/docker.sock
         restart: always
