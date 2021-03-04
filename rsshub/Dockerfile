@@ -9,7 +9,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/re
 RUN apk --no-cache add curl python make g++
 
 WORKDIR /app
-RUN wget --no-check-certificate https://github.com/DIYgod/RSSHub/archive/master.zip
+RUN wget --no-check-certificate https://github.91chifun.workers.dev//https://github.com/DIYgod/RSSHub/archive/master.zip
+# RUN wget --no-check-certificate https://github.com/DIYgod/RSSHub/archive/master.zip
 
 RUN if [ "$USE_CHINA_REGISTRY" = 1 ]; then \
   echo 'use yarn mirror'; yarn config set registry https://registry.npm.taobao.org; \
