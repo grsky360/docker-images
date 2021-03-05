@@ -7,12 +7,16 @@ services:
             - 80
         volumes: 
             - ./html:/html
+            - nginx-conf:/etc/nginx/conf.d
         restart: always
         labels: 
             - "traefik.http.routers.nginx.tls=true"
             - "traefik.http.routers.nginx.entrypoints=https"
             - "traefik.http.services.nginx.loadbalancer.server.port=80"
             - "traefik.http.routers.nginx.rule=Host(`abc.docker.localhost`)"
+
+volumes: 
+    nginx-conf:
 
 networks:
     default:
