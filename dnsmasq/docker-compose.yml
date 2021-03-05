@@ -1,0 +1,25 @@
+version: '3'
+
+services: 
+    dnsmasq:
+        image: jpillora/dnsmasq
+        expose: 
+            - 8080
+        ports: 
+            - '53:53/udp'
+        environment: 
+            HTTP_USER: admin
+            HTTP_PASS: admin
+        volumes: 
+            - '~/Documents/docker-volumes/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf'
+        restart: always
+        labels: 
+            - "traefik.http.routers.dnsmasq.rule=Host(`dns.docker.localhost`)"
+            - "traefik.http.services.dnsmasq.loadbalancer.server.port=8080"
+            - "traefik.http.routers.dnsmasq.tls=true"
+            - "traefik.http.routers.dnsmasq.entrypoints=https"
+
+networks:
+    default:
+        external:
+            name: traefik_default

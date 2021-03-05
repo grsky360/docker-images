@@ -1,0 +1,43 @@
+[tls]
+
+  [[tls.certificates]]
+    certFile = "/ssl/cert.pem"
+    keyFile = "/ssl/key.pem"
+    stores = ["default"]
+
+  [tls.stores]
+    [tls.stores.default]
+      [tls.stores.default.defaultCertificate]
+        certFile = "/ssl/cert.pem"
+        keyFile = "/ssl/key.pem"
+
+  [tls.options]
+    [tls.options.default]
+      minVersion = "VersionTLS12"
+    [tls.options.mintls13]
+      minVersion = "VersionTLS13"
+
+
+# [certificatesResolvers.ilio.acme]
+#   email = "zs360@qq.com"
+#   storage = "/acme.json"
+#   [certificatesResolvers.ilio.acme.httpChallenge]
+#     entryPoint = "web"
+
+[http.middlewares.https-redirect.redirectScheme]
+  scheme = "https"
+[http.middlewares.content-compress.compress]
+ 
+
+[http.services]
+  [http.services.noop.LoadBalancer]
+     [[http.services.noop.LoadBalancer.servers]]
+        url = "" # or url = "localhost"
+ 
+
+[http.routers]
+  [http.routers.https-redirect]
+    entryPoints = ["http"]
+    rule = "HostRegexp(`{any:.*}`)"
+    middlewares = ["https-redirect"]
+    service = "noop"

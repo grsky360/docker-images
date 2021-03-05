@@ -1,0 +1,32 @@
+[global]
+checkNewVersion = false
+sendAnonymousUsage = false
+
+
+[entryPoints]
+    [entryPoints.traefik]
+    address = ":8080" 
+
+    [entryPoints.http]
+    address = ":80"
+
+    [entryPoints.https]
+    address = ":443"
+
+
+# 自定义Router、Services（貌似必须定义在外部文件里面，坑了好久）
+[providers.file]
+    directory = "/etc/traefik/conf"
+
+[api]
+    insecure = true
+    dashboard = true
+
+[ping]
+
+[providers.docker]
+    endpoint = "unix:///var/run/docker.sock"
+    exposedByDefault = true
+
+[serversTransport]
+    insecureSkipVerify = true
