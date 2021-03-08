@@ -17,7 +17,7 @@ services:
             - "traefik.http.routers.dnsmasq.rule=Host(`dns.docker.localhost`)"
             - "traefik.http.routers.dnsmasq.entrypoints=https"
             - "traefik.http.routers.dnsmasq.tls=true"
-            - "traefik.http.routers.dnsmasq.tls.certresolver=le"
+            # - "traefik.http.routers.dnsmasq.tls.certresolver=le"
             - "traefik.http.services.dnsmasq.loadbalancer.server.port=8080"
 
 networks:
