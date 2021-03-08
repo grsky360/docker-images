@@ -15,6 +15,19 @@ services:
         depends_on:
             - redis
             - browserless
+        labels:
+            - "traefik.http.routers.rsshub.tls=true"
+            - "traefik.http.routers.rsshub.tls.certresolver=ilio"
+            - "traefik.http.routers.rsshub.entrypoints=https"
+            - "traefik.http.services.rsshub.loadbalancer.server.port=1200"
+            - "traefik.http.routers.rsshub.rule=Host(`hub.rss.ilio.tech`)"
+            - "traefik.http.routers.rsshub.service=rsshub"
+            - "traefik.http.routers.rsshub-doc.tls=true"
+            - "traefik.http.routers.rsshub-doc.tls.certresolver=ilio"
+            - "traefik.http.routers.rsshub-doc.entrypoints=https"
+            - "traefik.http.services.rsshub-doc.loadbalancer.server.port=1201"
+            - "traefik.http.routers.rsshub-doc.rule=Host(`doc.rss.ilio.tech`)"
+            - "traefik.http.routers.rsshub-doc.service=rsshub-doc"
 
     browserless:
         image: browserless/chrome
@@ -23,3 +36,8 @@ services:
     redis:
         image: redis:alpine
         restart: always
+
+networks:
+    default:
+        external:
+            name: traefik_default

@@ -2,8 +2,8 @@ version: '3'
 services:
   miniflux:
     image: miniflux/miniflux:latest
-    ports:
-      - "9011:8080"
+    expose:
+      - 8080
     depends_on:
       - db
     environment:
@@ -12,6 +12,13 @@ services:
       - CREATE_ADMIN=1
       - ADMIN_USERNAME=${ADMIN_USERNAME}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    restart: always
+    labels:
+      - "traefik.http.routers.miniflux.tls=true"
+      - "traefik.http.routers.miniflux.tls.certresolver=ilio"
+      - "traefik.http.routers.miniflux.entrypoints=https"
+      - "traefik.http.services.miniflux.loadbalancer.server.port=8080"
+      - "traefik.http.routers.miniflux.rule=Host(`rss.ilio.tech`)"
 
   db:
     image: postgres:latest
@@ -19,4 +26,10 @@ services:
       - POSTGRES_USER=miniflux
       - POSTGRES_PASSWORD=miniflux
     volumes:
-      - /data0/docker-volumes/miniflux:/var/lib/postgresql/data
+      - /yang/data/miniflux:/var/lib/postgresql/data
+    restart: always
+
+networks:
+  default:
+    external:
+      name: traefik_default

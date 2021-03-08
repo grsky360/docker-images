@@ -27,8 +27,20 @@ services:
       - db
     links:
       - db:db
-    ports:
-      - "9004:80"
+    expose:
+      - 80
     volumes:
-      - /data0/docker-volumes/filerun/html:/var/www/html
-      - /data0/docker-volumes/filerun/file:/user-files
+      - /yang/data/filerun/html:/var/www/html
+      - /yang/data/filerun/file:/user-files
+    restart: always
+    labels:
+      - "traefik.http.routers.filerun.tls=true"
+      - "traefik.http.routers.filerun.tls.certresolver=ilio"
+      - "traefik.http.routers.filerun.entrypoints=https"
+      - "traefik.http.services.filerun.loadbalancer.server.port=80"
+      - "traefik.http.routers.filerun.rule=Host(`share.ilio.tech`)"
+  
+networks:
+  default:
+    external:
+      name: traefik_default

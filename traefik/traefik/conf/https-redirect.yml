@@ -1,0 +1,20 @@
+http:
+    middlewares:
+        https-redirect:
+            redirectScheme:
+                scheme: "https"
+        content-compress:
+            compress: {}
+    services:
+        noop:
+            loadBalancer:
+                servers:
+                    - url: "localhost"
+    routers:
+        https-redirect:
+            rule: "HostRegexp(`{any:.*}`)"
+            entryPoints:
+                - "http"
+            middlewares:
+                - "https-redirect"
+            service: noop

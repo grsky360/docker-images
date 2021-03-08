@@ -2,12 +2,23 @@ version: '3'
 services:
   bitwarden:
     image: bitwardenrs/server
-    ports:
-      - "9001:80"
-      - "9006:3012"
+    expose:
+      - 80
+      - 3012
     environment:
       - SIGNUPS_ALLOWED=false
       - ADMIN_TOKEN=admin_token
       - WEBSOCKET_ENABLED=true
     volumes:
-      - /data0/docker-volumes/bitwarden/:/data/
+      - /yang/data/bitwarden/:/data/
+    labels:
+      - "traefik.http.routers.bitwarden.tls=true"
+      - "traefik.http.routers.bitwarden.tls.certresolver=ilio"
+      - "traefik.http.routers.bitwarden.entrypoints=https"
+      - "traefik.http.services.bitwarden.loadbalancer.server.port=80"
+      - "traefik.http.routers.bitwarden.rule=Host(`bw.ilio.tech`)"
+
+networks:
+  default:
+    external:
+      name: traefik_default

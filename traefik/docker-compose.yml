@@ -3,24 +3,20 @@ version: '3'
 services:
     traefik:
         image: traefik:v2.4
+        expose:
+            - 8080
         ports:
             - "80:80"
             - "443:443"
-            - "8080:8080"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-            - ./traefik.toml:/etc/traefik/traefik.toml
-            - ./acme.json:/acme.json
-            - ./conf:/etc/traefik/conf
-            - ./ssl:/ssl
+            - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+            - ./traefik/conf:/etc/traefik/conf
+            - ./traefik:/etc/traefik
         restart: always
         labels: 
-            - "traefik.http.routers.traefik.rule=Host(`traefik.docker.localhost`)"
-            - "traefik.http.routers.traefik.tls=true"
+            - "traefik.http.routers.traefik.rule=Host(`router.docker.localhost`)"
             - "traefik.http.routers.traefik.entrypoints=https"
+            - "traefik.http.routers.traefik.tls=true"
+            # - "traefik.http.routers.traefik.tls.certresolver=le"
             - "traefik.http.services.traefik.loadbalancer.server.port=8080"
-
-        deploy:
-            placement:
-                constraints:
-                    - node.role == manager

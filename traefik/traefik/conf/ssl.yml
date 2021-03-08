@@ -1,0 +1,14 @@
+tls:
+    certificates:
+        - certFile: "/etc/traefik/ssl/cert.pem"
+          keyFile: "/etc/traefik/ssl/key.pem"
+    stores:
+        default:
+            defaultCertificate:
+                certFile: "/etc/traefik/ssl/cert.pem"
+                keyFile: "/etc/traefik/ssl/key.pem"
+    options:
+        default:
+            minVersion: "VersionTLS12"
+        mintls13:
+            minVersion: "VersionTLS13"

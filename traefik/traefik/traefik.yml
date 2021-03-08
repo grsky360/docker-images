@@ -1,0 +1,36 @@
+global:
+    checkNewVersion: false
+    sendAnonymousUsage: false
+    
+entryPoints:
+    traefik:
+        address: ":8080"
+    http:
+        address: ":80"
+
+    https:
+        address: ":443"
+
+# certificatesResolvers:
+#     le:
+#         acme:
+#             email: "zs360@qq.com"
+#             storage: "/etc/traefik/acme.json"
+#             tlsChallenge: {}
+#             dnsChallenge:
+
+api:
+    insecure: true
+    dashboard: true
+
+ping: {}
+
+serversTransport:
+    insecureSkipVerify: false
+
+providers:
+    file:
+        directory: "/etc/traefik/conf"
+    docker:
+        endpoint: "unix:///var/run/docker.sock"
+        exposedByDefault: true

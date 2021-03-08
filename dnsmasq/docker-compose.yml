@@ -11,13 +11,14 @@ services:
             HTTP_USER: admin
             HTTP_PASS: admin
         volumes: 
-            - '~/Documents/docker-volumes/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf'
+            - '/yang/data/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf'
         restart: always
         labels: 
             - "traefik.http.routers.dnsmasq.rule=Host(`dns.docker.localhost`)"
-            - "traefik.http.services.dnsmasq.loadbalancer.server.port=8080"
-            - "traefik.http.routers.dnsmasq.tls=true"
             - "traefik.http.routers.dnsmasq.entrypoints=https"
+            - "traefik.http.routers.dnsmasq.tls=true"
+            - "traefik.http.routers.dnsmasq.tls.certresolver=le"
+            - "traefik.http.services.dnsmasq.loadbalancer.server.port=8080"
 
 networks:
     default:
