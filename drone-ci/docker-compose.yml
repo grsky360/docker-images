@@ -31,7 +31,7 @@ services:
             DRONE_RPC_PROTO: https
             DRONE_RPC_HOST: ci.ilio.tech
             DRONE_RPC_SECRET: ${DRONE_RPC_SECRET:-rpc_secret}
-            DRONE_RUNNER_CAPACITY: 2
+            DRONE_RUNNER_CAPACITY: 3
             DRONE_RUNNER_NAME: drone-runner-docker
         volumes: 
             - /var/run/docker.sock:/var/run/docker.sock
