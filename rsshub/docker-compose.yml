@@ -2,11 +2,10 @@ version: '3'
 
 services:
     rsshub:
-        image: grsky360/rsshub:latest
+        image: diygod/rsshub:latest
         restart: always
         ports:
             - '9003:1200'
-            - '9014:1201'
         environment:
             NODE_ENV: production
             CACHE_TYPE: redis
@@ -16,12 +15,11 @@ services:
             - redis
             - browserless
         labels:
+            - "traefik.http.routers.rsshub.rule=Host(`hub.rss.ilio.tech`)"
+            - "traefik.http.routers.rsshub.entrypoints=https"
             - "traefik.http.routers.rsshub.tls=true"
             - "traefik.http.routers.rsshub.tls.certresolver=ilio"
-            - "traefik.http.routers.rsshub.entrypoints=https"
             - "traefik.http.services.rsshub.loadbalancer.server.port=1200"
-            - "traefik.http.routers.rsshub.rule=Host(`hub.rss.ilio.tech`)"
-            - "traefik.http.routers.rsshub.service=rsshub"
 
     rsshub-doc:
         image: grsky360/rsshub-doc:latest
@@ -29,7 +27,7 @@ services:
             DEPLOYMENT_PATH: /dist
         volumes: 
             - /yang/data/rsshub-doc:/dist
-            
+
     browserless:
         image: browserless/chrome:1.43-chrome-stable
         restart: always
