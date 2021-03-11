@@ -22,15 +22,16 @@ services:
             - "traefik.http.services.rsshub.loadbalancer.server.port=1200"
             - "traefik.http.routers.rsshub.rule=Host(`hub.rss.ilio.tech`)"
             - "traefik.http.routers.rsshub.service=rsshub"
-            - "traefik.http.routers.rsshub-doc.tls=true"
-            - "traefik.http.routers.rsshub-doc.tls.certresolver=ilio"
-            - "traefik.http.routers.rsshub-doc.entrypoints=https"
-            - "traefik.http.services.rsshub-doc.loadbalancer.server.port=1201"
-            - "traefik.http.routers.rsshub-doc.rule=Host(`doc.rss.ilio.tech`)"
-            - "traefik.http.routers.rsshub-doc.service=rsshub-doc"
 
+    rsshub-doc:
+        image: grsky360/rsshub-doc:latest
+        environment: 
+            DEPLOYMENT_PATH: /dist
+        volumes: 
+            - /yang/data/rsshub-doc:/dist
+            
     browserless:
-        image: browserless/chrome
+        image: browserless/chrome:1.43-chrome-stable
         restart: always
 
     redis:
