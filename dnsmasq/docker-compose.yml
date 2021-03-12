@@ -12,6 +12,7 @@ services:
             HTTP_PASS: admin
         volumes: 
             - '/yang/data/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf'
+            - './resolv.conf:/etc/resolv.conf'
         restart: always
         labels: 
             - "traefik.http.routers.dnsmasq.rule=Host(`dns.docker.localhost`)"
