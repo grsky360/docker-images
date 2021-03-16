@@ -1,0 +1,23 @@
+version: '3'
+
+services: 
+    trilium:
+        image: zadam/trilium:0.46-latest
+        expose: 
+            - 8080
+        restart: always
+        volumes:
+            - trilium-data:/root/trilium-data
+        labels: 
+            - "traefik.http.routers.trilium.rule=Host(`note.docker.localhost`)"
+            - "traefik.http.routers.trilium.entrypoints=https"
+            - "traefik.http.routers.trilium.tls=true"
+            # - "traefik.http.routers.trilium.tls.certresolver=ilio"
+            - "traefik.http.services.trilium.loadbalancer.server.port=8080"
+volumes: 
+    trilium-data:
+
+networks:
+    default:
+        external:
+            name: traefik_default
