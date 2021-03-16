@@ -6,6 +6,7 @@ services:
         expose: 
             - 8080
         restart: always
+        user: root
         volumes:
             - trilium-data:/root/trilium-data
         labels: 
