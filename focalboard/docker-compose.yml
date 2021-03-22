@@ -1,0 +1,25 @@
+version: '3'
+
+services: 
+    focalboard:
+        image: mattermost/focalboard
+        expose:
+            - 8000
+        environment: 
+            VIRTUAL_HOST: note.docker.localhost
+            VIRTUAL_PORT: 8000
+        volumes: 
+            - ./config.json:/opt/focalboard/config.json
+            - ./data:/data
+        restart: always
+        labels: 
+            - "traefik.http.routers.note.rule=Host(`note.docker.localhost`)"
+            - "traefik.http.routers.note.entrypoints=https"
+            - "traefik.http.routers.note.tls=true"
+            # - "traefik.http.router.traefik.tls.certresolver=ilio"
+            - "traefik.http.services.note.loadbalancer.server.port=8000"
+
+networks: 
+    default:
+        external:
+            name: traefik_default
