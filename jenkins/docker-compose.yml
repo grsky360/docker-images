@@ -7,6 +7,7 @@ services:
             - 8080
             - 50000
         # restart: always
+        user: root
         environment:
             JAVA_OPTS: "-Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true"
         volumes:
