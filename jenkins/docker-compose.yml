@@ -1,0 +1,20 @@
+version: '3'
+
+services: 
+    jenkins:
+        image: jenkins/jenkins:lts-alpine
+        expose:
+            - 8080
+            - 50000
+        # restart: always
+        labels: 
+            - "traefik.http.routers.jenkins.rule=Host(`note.docker.localhost`)"
+            - "traefik.http.routers.jenkins.entrypoints=https"
+            - "traefik.http.routers.jenkins.tls=true"
+            - "traefik.http.routers.jenkins.tls.certresolver=ilio"
+            - "traefik.http.services.jenkins.loadbalancer.server.port=8080"
+
+networks: 
+    default:
+        external:
+            name: traefik_default
