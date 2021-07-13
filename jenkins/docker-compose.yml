@@ -7,6 +7,11 @@ services:
             - 8080
             - 50000
         # restart: always
+        environment:
+            JAVA_OPTS: "-Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /yang/data/jenkins:/var/jenkins_home
         labels: 
             - "traefik.http.routers.jenkins.rule=Host(`note.docker.localhost`)"
             - "traefik.http.routers.jenkins.entrypoints=https"
