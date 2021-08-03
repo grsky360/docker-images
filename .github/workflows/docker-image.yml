@@ -1,0 +1,20 @@
+name: Docker Image CI
+
+on:
+  schedule:
+  - cron: "0 0 1 * ?"
+  push:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+        cd drone-ci/git
+        docker build . --file Dockerfile --tag grsky360/drone-git:latest
