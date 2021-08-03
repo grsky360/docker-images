@@ -18,3 +18,7 @@ jobs:
       run: |
         cd drone-ci/git
         docker build . --file Dockerfile --tag grsky360/drone-git:latest
+    - name: Log into registry
+      run: echo "${{ secrets.DOCKER_HUB }}" | docker login -u grsky360 --password-stdin
+    - name: push
+      run: docker push grsky360/drone-git:latest
