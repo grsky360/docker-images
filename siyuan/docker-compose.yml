@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  siyuan:
+    image: b3log/siyuan
+    expose:
+      - 6806
+    volumes:
+      - /yang/data/siyuan:/root/Documents/SiYuan
+    command:
+      [
+        "--resident=true",
+        "--accessAuthCode=${ACCESS_TOKEN}",
+        "--servePath=note.docker.localhost",
+        "--ssl",
+      ]
+    labels:
+      - "traefik.http.routers.node.rule=Host(`note.docker.localhost`)"
+      - "traefik.http.routers.node.entrypoints=https"
+      - "traefik.http.routers.node.tls=true"
+      # - "traefik.http.routers.dnsmasq.tls.certresolver=le"
+      - "traefik.http.services.node.loadbalancer.server.port=6806"
+
+networks:
+  default:
+    name: traefik_default
