@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13.1
+    expose:
+      - 5432
+    volumes:
+      - /yang/data/joplin/postgres:/var/lib/postgresql/data
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+    # labels:
+      # - "traefik.tcp.routers.joplin-db.rule=HostSNI(`*`)"
+      # - "traefik.tcp.routers.joplin-db.rule=HostSNI(`joplin-db.docker.localhost`)"
+      # - "traefik.tcp.routers.joplin-db.entrypoints=http"
+      # - "traefik.tcp.routers.joplin-db.tls=true"
+      # - "traefik.tcp.routers.joplin-db.tls.certresolver=le"
+      # - "traefik.tcp.routers.joplin-db.tls.passthrough=true"
+      # - "traefik.tcp.services.joplin-db.loadbalancer.server.port=5432"
+
+  app:
+    image: joplin/server:latest
+    depends_on:
+      - db
+    expose:
+      - ${APP_PORT}
+    restart: always
+    environment:
+      - APP_PORT=${APP_PORT}
+      - APP_BASE_URL=${APP_BASE_URL}
+      - DB_CLIENT=pg
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=db
+    labels:
+      - "traefik.http.routers.joplin.rule=Host(`joplin.docker.localhost`)"
+      - "traefik.http.routers.joplin.entrypoints=https"
+      - "traefik.http.routers.joplin.tls=true"
+      # - "traefik.http.routers.joplin.tls.certresolver=le"
+      - "traefik.http.services.joplin.loadbalancer.server.port=${APP_PORT}"
+networks:
+  default:
+    external:
+      name: traefik_default
