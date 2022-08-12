@@ -14,11 +14,12 @@ services:
       - "traefik.http.routers.bark.tls.certresolver=ilio"
       - "traefik.http.routers.bark.entrypoints=https"
       - "traefik.http.services.bark.loadbalancer.server.port=8080"
+    command:
+      - --user ${USERNAME}
+      - --password ${PASSWORD}
 
 
 networks:
   default:
     external:
       name: traefik_default
-
-# docker run --rm --name bark -p 8080:8080 -v $(pwd)/bark-data:/data finab/bark-server
