@@ -1,0 +1,24 @@
+version: '3'
+
+services: 
+  bark:
+    image: finab/bark-server
+    expose:
+      - 8080
+    restart: always
+    volumes:
+      - /yang/data/bark/data:/data
+    labels:
+      - "traefik.http.routers.bark.rule=Host(`share.ilio.tech`)"
+      - "traefik.http.routers.bark.tls=true"
+      - "traefik.http.routers.bark.tls.certresolver=ilio"
+      - "traefik.http.routers.bark.entrypoints=https"
+      - "traefik.http.services.bark.loadbalancer.server.port=8080"
+
+
+networks:
+  default:
+    external:
+      name: traefik_default
+
+# docker run --rm --name bark -p 8080:8080 -v $(pwd)/bark-data:/data finab/bark-server
