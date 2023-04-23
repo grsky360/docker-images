@@ -1,6 +1,6 @@
 FROM curlimages/curl
 
-ENV URL=https://github.91chi.fun//https://github.com//ilanyu/ReverseProxy/releases/download/v1.4/ReverseProxy_linux_amd64
+ENV URL=https://github.com//ilanyu/ReverseProxy/releases/download/v1.4/ReverseProxy_linux_amd64
 
 WORKDIR /app
 
