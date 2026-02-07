@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+    gateway:
+        image: ghcr.nju.edu.cn/songquanpeng/one-api
+        restart: always
+        expose:
+            - 3000
+        environment:
+            - TZ=Asia/Shanghai
+        volumes:
+            - /yang/data/llm/gateway:/data
+        labels:
+            - "traefik.http.routers.ai-gateway.rule=Host(`gateway.ai.ilio.top`)"
+            - "traefik.http.routers.ai-gateway.entrypoints=https"
+            - "traefik.http.routers.ai-gateway.tls=true"
+            - "traefik.http.routers.ai-gateway.tls.certresolver=ilio"
+            - "traefik.http.services.ai-gateway.loadbalancer.server.port=3000"
+
+
+networks:
+    default:
+        external:
+            name: traefik_default

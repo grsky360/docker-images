@@ -1,0 +1,34 @@
+services:
+  openclaw:
+    image: alpine/openclaw:2026.2.3
+    environment:
+      TERM: xterm-256color
+      # BROWSER: echo
+    volumes:
+      - ${OPENCLAW_CONFIG_DIR}:/root/.openclaw
+    expose:
+      - "18789"
+      - "18790"
+    init: true
+    restart: unless-stopped
+    user: root
+    entrypoint: ["node", "dist/index.js"]
+    command:
+      [
+        "gateway",
+        "--bind",
+        "${OPENCLAW_GATEWAY_BIND:-lan}",
+        "--port",
+        "18789",
+      ]
+    labels:
+      - "traefik.http.routers.ai-openclaw.rule=Host(`openclaw.ai.ilio.top`)"
+      - "traefik.http.routers.ai-openclaw.entrypoints=https"
+      - "traefik.http.routers.ai-openclaw.tls=true"
+      - "traefik.http.routers.ai-openclaw.tls.certresolver=ilio"
+      - "traefik.http.services.ai-openclaw.loadbalancer.server.port=18789"
+
+networks:
+  default:
+    external:
+      name: traefik_default
