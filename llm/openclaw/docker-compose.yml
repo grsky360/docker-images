@@ -10,7 +10,7 @@ services:
       - "${OPENCLAW_GATEWAY_PORT:-18789}:18789"
       # - "${OPENCLAW_BRIDGE_PORT:-18790}:18790"
     init: true
-    restart: unless-stopped
+    restart: always
     user: root
     entrypoint: ["node", "dist/index.js"]
     command:

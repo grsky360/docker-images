@@ -10,7 +10,7 @@ services:
       - "18789"
       - "18790"
     init: true
-    restart: unless-stopped
+    restart: always
     user: root
     entrypoint: ["node", "dist/index.js"]
     command:
